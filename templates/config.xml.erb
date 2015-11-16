@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+  <Proton>
+    <ProtonUrlSuffix><%= @proton_url_suffix %></ProtonUrlSuffix>
+  </Proton>
+  <UssNode>
+    <BaseAddress><%= @base_address %></BaseAddress>
+    <ScenarioInstanceId><%= @id %></ScenarioInstanceId>
+    <EnqueuedBy><%= @enqueued_by %></EnqueuedBy>
+  </UssNode>
+  <UssService>
+    <BaseAddress><%= @uss_base_endpoint %></BaseAddress>
+    <DdtfWebLink><%= @ddtf_web_link %></DdtfWebLink>
+    <ArtifactStoragePath><%= @artifact_storage_path %></ArtifactStoragePath>
+    <RestartProtectionTimeout><%= @restart_protection_timeout %></RestartProtectionTimeout>
+    <ApiAddress><%= @uss_api_endpoint %></ApiAddress>
+    <ApiAddressSecured><%= @uss_secure_api_endpoint %></ApiAddressSecured>
+  </UssService>
+  <Db4oLocal>
+    <ScenarioInstancesDirPath><%= @scenario_instaces_dir_path %></ScenarioInstancesDirPath>
+  </Db4oLocal>
+  <Db4o>
+    <ResultHost><%= @db4o_result_host %></ResultHost>
+    <ResultPort><%= @db4o_result_port %></ResultPort>
+    <ResultUsername><%= @db4o_result_username %></ResultUsername>
+    <ResultPassword><%= @db4o_result_password %></ResultPassword>
+    <DefinitionHost><%= @db4o_definition_host %></DefinitionHost>
+    <DefinitionPort><%= @db4o_definition_port %></DefinitionPort>
+    <DefinitionUsername><%= @db4o_definition_username %></DefinitionUsername>
+    <DefinitionPassword><%= @db4o_definition_password %></DefinitionPassword>
+  </Db4o>
+  <FinalCI>
+    <FinalCIUri><%= @final_ci_endpoint %></FinalCIUri>
+    <Timeout><%= @final_ci_timeout %></Timeout>
+  </FinalCI>
+  <PhysicalDevices>
+    <NumberOfTriesOnNetworkFault>3</NumberOfTriesOnNetworkFault>
+    <NetworkFaultRetryIntervalLowerBoundInSeconds>60</NetworkFaultRetryIntervalLowerBoundInSeconds>
+    <NetworkFaultRetryIntervalUpperBoundInSeconds>120</NetworkFaultRetryIntervalUpperBoundInSeconds>
+    <ReservationTimeoutInMinutes>960</ReservationTimeoutInMinutes>
+  </PhysicalDevices>
+  <EmailNotification>
+    <JiraServiceEndpoint>http://labdorang.cz.avg.com/LabServices/jiraservice.svc/</JiraServiceEndpoint>
+    <LabServicesUrl>http://labdorang.cz.avg.com/LabServices</LabServicesUrl>
+  </EmailNotification>
+  <ExecutionEngineUnixInstallation>
+    <GuestPath>~/Execution</GuestPath>
+    <ExecutionScriptPath>~/Execution/ExecutionScript.sh</ExecutionScriptPath>
+    <GuestSharePath>\Execution</GuestSharePath>
+    <StorageIpAddress><%= @storage_ip_address %></StorageIpAddress>
+    <ExecutionScriptName>ExecutionScript.sh</ExecutionScriptName>
+  </ExecutionEngineUnixInstallation>
+  <ExecutionEngineWindowsInstallation>
+    <GuestPath>c:\uss</GuestPath>
+    <ExecutionEnginePath>c:\USS\Production\ExecutionEngine</ExecutionEnginePath>
+    <StorageIpAddress><%= @storage_ip_address %></StorageIpAddress>
+    <ExecutionEngineBinaryName>AVG.Ddtf.Execution.Host.exe</ExecutionEngineBinaryName>
+  </ExecutionEngineWindowsInstallation>
+  <GitSource>
+    <RelativePathToPackagesInGit>automation</RelativePathToPackagesInGit>
+  </GitSource>
+  <NodeLabManager>
+    <DefaultResourcePoolName><%= @resource_pool_name %></DefaultResourcePoolName>
+    <UseMachinePool><%= @use_machine_pool %></UseMachinePool>
+    <ClusterName><%= @cluster_name %></ClusterName>
+    <ClusterEndpointAddress><%= @cluster_endpoint %></ClusterEndpointAddress>
+  </NodeLabManager>
+  <PackageProvider>
+    <BaseAddress><%= @package_provider_endpoint %></BaseAddress>
+  </PackageProvider>
+  <ResourceManagerProxy>
+    <HasResource>false</HasResource>
+  </ResourceManagerProxy>
+  <ServerScript>
+    <TcpServer>10.5.0.26</TcpServer>
+    <TcpPort>10125</TcpPort>
+  </ServerScript>
+  <Timeout>
+    <FloatingRescheduledPeriod><%= @floating_rescheduled_period %></FloatingRescheduledPeriod>
+    <OnTimeoutScriptPath>OnTimeoutScript.ps1</OnTimeoutScriptPath>
+    <OnTimeoutDownloadedScript>OnTimeoutDownloadedScript.ps1</OnTimeoutDownloadedScript>
+  </Timeout>
+  <UncSource>
+    <Username><%= @unc_username %></Username>
+    <Password><%= @unc_password %></Password>
+  </UncSource>
+  <UnixInstallation>
+    <Username><%= @admin_username_unix %></Username>
+    <Password><%= @admin_password_unix %></Password>
+  </UnixInstallation>
+  <UssLockCheck>
+    <ByPass>false</ByPass>
+  </UssLockCheck>
+  <VirtualServers>
+    <AssignedServers />
+  </VirtualServers>
+  <WholeWorkspaceWindowsInstallation>
+    <GuestPath>c:\uss\scripts</GuestPath>
+  </WholeWorkspaceWindowsInstallation>
+  <WindowsInstallation>
+    <Username><%= @admin_username_windows %>administrator</Username>
+    <Password><%= @admin_password_windows %></Password>
+  </WindowsInstallation>
+  <EmailFactory>
+    <UssSmtpHost>labdorang.cz.avg.com</UssSmtpHost>
+    <UssSmtpPort>25</UssSmtpPort>
+  </EmailFactory>
+</config>
