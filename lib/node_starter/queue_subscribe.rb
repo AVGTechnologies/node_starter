@@ -18,8 +18,6 @@ module NodeStarter
 
         params = parse(payload)
 
-        p params
-
         starter = NodeStarter::Starter.new(
           params['build_id'], params['config'], params['enqueue_data'])
 
