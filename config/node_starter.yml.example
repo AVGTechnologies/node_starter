@@ -1,5 +1,5 @@
 default: &defaults
-  node_binaries_path:               /var/tmp/node_bin
+  node_binaries_path:               /tmp/node_bin
   node_binary_name:                 AVG.Ddtf.UssNode.exe
   config_template_path:             /templates/config.xml.erb
   log_level:                        <%= Logger::DEBUG %>
