@@ -1,0 +1,15 @@
+language: ruby
+rvm:
+  - "2.2.2"
+
+sudo: false
+cache: bundler
+
+services:
+  - rabbitmq
+
+before_script: |
+  cp config/node_starter.yml.example config/node_starter.yml
+  mkdir /tmp/node_bin
+
+script: bundle exec rspec
