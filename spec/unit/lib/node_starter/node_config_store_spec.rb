@@ -2,15 +2,9 @@ require 'rexml/document'
 require 'xmlsimple'
 
 describe NodeStarter::NodeConfigStore do
+  let(:values) { {} }
   let(:subject) do
-    values = {
-      enqueued_by: 'tester'
-    }
     NodeStarter::NodeConfigStore.new(values)
-  end
-
-  let(:subject2) do
-    NodeStarter::NodeConfigStore.new({})
   end
 
   let(:dir) do
@@ -28,13 +22,18 @@ describe NodeStarter::NodeConfigStore do
       expect(File.exist?("#{dir}/config.xml")).to be true
     end
     it 'replaces value' do
+      values['enqueued_by'] = 'tester'
+
       subject.write_to(dir)
+
       data = XmlSimple.xml_in(File.read("#{dir}/config.xml"))
       uss_node = data['UssNode']
+
       expect(uss_node[0]['EnqueuedBy']).to eql(['tester'])
     end
     it 'leaves empty unfilled field' do
-      subject2.write_to(dir)
+      subject.write_to(dir)
+      
       data = XmlSimple.xml_in(File.read("#{dir}/config.xml"))
       uss_node = data['UssNode']
       expect(uss_node[0]['ScenarioInstanceId']).to eql([{}])

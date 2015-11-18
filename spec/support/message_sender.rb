@@ -9,7 +9,6 @@ module NodeStarter
     end
 
     def send_message(message = 'Hello World!')
-      p message
       @conn.start
 
       @channel = @conn.create_channel
