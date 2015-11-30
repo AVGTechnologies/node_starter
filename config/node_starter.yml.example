@@ -6,6 +6,8 @@ default: &defaults
   start_uss_node_queue_name:        builds.windows.ussnode
   stop_uss_node_queue_name:         worker.commands
   bunny_host:                       localhost
+  bunny_user:                       guest
+  bunny_password:                   guest
   max_running_uss_nodes:            1
   uss_node:
       enqueued_by:                  someone

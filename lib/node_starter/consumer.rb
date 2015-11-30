@@ -7,7 +7,12 @@ module NodeStarter
     end
 
     def setup
-      @conn = Bunny.new(hostname: NodeStarter.config.bunny_host)
+      @conn = Bunny.new(
+        hostname: NodeStarter.config.bunny_host,
+        username: NodeStarter.config.bunny_user,
+        password: NodeStarter.config.bunny_password
+
+      )
       @conn.start
 
       @channel = @conn.create_channel
