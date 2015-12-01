@@ -33,7 +33,7 @@ describe NodeStarter::NodeConfigStore do
     end
     it 'leaves empty unfilled field' do
       subject.write_to(dir)
-      
+
       data = XmlSimple.xml_in(File.read("#{dir}/config.xml"))
       uss_node = data['UssNode']
       expect(uss_node[0]['ScenarioInstanceId']).to eql([{}])
