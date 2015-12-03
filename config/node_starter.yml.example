@@ -9,6 +9,10 @@ default: &defaults
   bunny_user:                       guest
   bunny_password:                   guest
   max_running_uss_nodes:            1
+  redis:
+    url: redis://localhost:6379
+    size: 3
+    namespace: node_starter
   uss_node:
       enqueued_by:                  someone
       proton_url_suffix:            Proton/

@@ -8,5 +8,6 @@ cache: bundler
 before_script: |
   cp config/node_starter.yml.example config/node_starter.yml
   mkdir /tmp/node_bin
+  bundle exec rake db:create db:migrate --trace
 
 script: bundle exec rspec

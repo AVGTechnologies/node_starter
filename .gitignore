@@ -1,2 +1,5 @@
 /config/node_starter.yml
+/config/ns_development.sqlite3
+/config/ns_test.sqlite3
+/config/ns_production.sqlite3
 /tags

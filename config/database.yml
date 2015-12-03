@@ -1,0 +1,16 @@
+default: &default
+  adapter: sqlite3
+  pool: 5
+  timeout: 5000
+
+development:
+  <<: *default
+  database: config/ns_development.sqlite3
+
+test:
+  <<: *default
+  database: config/ns_test.sqlite3
+
+production:
+  <<: *default
+  database: config/ns_production.sqlite3  
