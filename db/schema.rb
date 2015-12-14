@@ -15,15 +15,16 @@ ActiveRecord::Schema.define(version: 20151208100559) do
 
   create_table "nodes", force: :cascade do |t|
     t.integer  "build_id"
-    t.integer  "pid"
+    t.integer  "pid",            default: -1
     t.datetime "started_at"
     t.datetime "finished_at"
     t.datetime "aborted_at"
     t.string   "status"
     t.integer  "abort_attempts"
     t.boolean  "killed"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.string   "path"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
 end

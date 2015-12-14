@@ -16,47 +16,28 @@ module NodeStarter
       @enqueue_data = enqueue_data
     end
 
-    def spawn_process
-      @dir = Dir.mktmpdir("running_uss_node_#{build_id}")
+    def schedule_spawn_process
+      @dir = Dir.mktmpdir("uss_node_#{build_id}_")
 
       NodeStarter::NodeConfigStore.new(@config_values).write_to(dir)
       NodeStarter::EnqueueDataStore.write_to(dir, @enqueue_data)
       NodeStarter::PrepareBinaries.write_to(dir)
 
-      @t = Thread.new do
-        start
-      end
-
-      @t.value
-    end
-
-    def wait_for_process_to_finish
-      @t.join
-    end
-
-    def process_result
-      @t.value unless @t.alive?
-    end
-
-    def cancel_process
-      Thread.kill(@t)
+      start
     end
 
     private
 
     def start
-      node_executable_path = File.join(dir, NodeStarter.config.node_binary_name)
+      node = Node.create!(
+        build_id: @config_values['id'],
+        path: @dir,
+        status: :created
+      )
+      node.save!
 
-      command = "#{node_executable_path} --start -e #{dir}/enqueueData.bin -c #{dir}/config.xml"
-      @pid = Process.spawn({}, command)
-
-      NodeStarter.logger.info("Node #{@config_values['id']} spawned in #{dir} with pid #{pid}")
-
-      wait_thr = Process.detach(pid)
-      @exit_code = wait_thr.join
-
-      NodeStarter.logger.info("Node #{@config_values['id']} finished with exit code: #{@exit_code}")
-      @exit_code
+      NodeStarter.logger.info("Scheduling starter_worker id=#{node.id}")
+      NodeStarter::StarterWorker.perform_async(node.id)
     end
   end
 end

@@ -21,9 +21,7 @@ module NodeStarter
         starter = NodeStarter::Starter.new(
           params['build_id'], params['config'], params['enqueue_data'])
 
-        starter.spawn_process
-
-        starter.wait_for_process_to_finish
+        starter.schedule_spawn_process
 
         @consumer.ack(delivery_info)
       end

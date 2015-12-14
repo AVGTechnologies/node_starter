@@ -32,17 +32,17 @@ module NodeStarter
 
     def setup
       logger.level = config.log_level || Logger::WARN
-	  
+
       Database.connect
 
       Sidekiq.logger = NodeStarter.logger
 
       Sidekiq.configure_server do |config|
-        config.redis = NodeStarter.config.redis 
+        config.redis = NodeStarter.config.redis
       end
 
       Sidekiq.configure_client do |config|
-        config.redis = NodeStarter.config.redis 
+        config.redis = NodeStarter.config.redis
       end
     end
 
