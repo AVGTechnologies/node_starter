@@ -4,7 +4,8 @@ require 'node_starter/database'
 
 require 'sidekiq'
 require 'node_starter/workers/starter'
-
+require 'node_starter/workers/aborter' 
+require 'node_starter/queue_subscribe'
 
 # Namespace that handles git operations for NodeStarter
 module NodeStarter

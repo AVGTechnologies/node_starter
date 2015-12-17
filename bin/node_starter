@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH << 'lib'
+require 'bundler/setup'
+require 'node_starter'
+
+NodeStarter.setup
+
+NodeStarter::QueueSubscribe.new.start_listening
+
+loop do
+  sleep 5
+end
