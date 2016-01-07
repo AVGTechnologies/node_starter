@@ -25,6 +25,7 @@ describe 'NodeStarter::Subscribe integration' do
 
   it 'starts node process' do
     expect(NodeStarter::Consumer).to receive(:new) { fake_consumer }
+    allow(NodeStarter::PrepareBinaries).to receive(:write_to)
 
     expect_any_instance_of(NodeStarter::Starter)
       .to receive(:start).with(any_args).and_return(111)

@@ -5,11 +5,11 @@ describe NodeStarter::Starter do
 
   before(:each) do
     allow(subject).to receive(:start).and_return(0)
+    allow(NodeStarter::PrepareBinaries).to receive(:write_to)
   end
 
   describe '#spawn_process' do
     it 'prepares binaries' do
-      allow(NodeStarter::PrepareBinaries).to receive(:write_to)
       subject.schedule_spawn_process
       FileUtils.rm_rf(subject.dir)
     end
