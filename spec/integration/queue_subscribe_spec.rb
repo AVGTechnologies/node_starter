@@ -22,9 +22,13 @@ describe 'NodeStarter::Subscribe integration' do
   let(:subject) { NodeStarter::QueueSubscribe.new }
   # let(:sender) { NodeStarter::MessageSender.new }
   let(:fake_consumer) { FakeConsumer.new }
+  let(:fake_cmd_consumer) do
+    double('cmd_consumer', setup: {}, subscribe: {}, register_node: {})
+  end
 
   it 'starts node process' do
     expect(NodeStarter::Consumer).to receive(:new) { fake_consumer }
+    expect(NodeStarter::CmdConsumer).to receive(:new) { fake_cmd_consumer }
 
     expect_any_instance_of(NodeStarter::Starter)
       .to receive(:start).with(any_args).and_return(111)

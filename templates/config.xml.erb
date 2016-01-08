@@ -68,6 +68,10 @@
   <PackageProvider>
     <BaseAddress><%= @package_provider_endpoint %></BaseAddress>
   </PackageProvider>
+  <RubyPackageProvider>
+    <PackageProviderUri><%= @ruby_package_provider_endpoint %></PackageProviderUri>
+    <MaxTimeoutInMinutes>45</MaxTimeoutInMinutes>
+  </RubyPackageProvider>
   <ResourceManagerProxy>
     <HasResource>false</HasResource>
   </ResourceManagerProxy>

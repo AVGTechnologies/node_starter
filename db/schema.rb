@@ -14,7 +14,7 @@
 ActiveRecord::Schema.define(version: 20151208100559) do
 
   create_table "nodes", force: :cascade do |t|
-    t.integer  "build_id"
+    t.string   "build_id"
     t.integer  "pid",            default: -1
     t.datetime "started_at"
     t.datetime "finished_at"

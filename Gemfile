@@ -11,6 +11,8 @@ gem 'sqlite3',          '~> 1.3.11'
 gem 'nokogiri',         '>= 1.6.7.rc'
 gem 'sidekiq',          '= 3.4.2'
 
+gem 'sys-proctable',    '= 0.9.9'
+
 group :test, :development do
   gem 'rspec'
   gem 'rubocop'
