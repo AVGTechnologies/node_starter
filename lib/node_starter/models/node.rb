@@ -18,5 +18,15 @@ require 'active_model/validations'
 #  updated_at     :datetime         not null
 #
 
-class Node < ActiveRecord::Base
+module NodeStarter::Models
+  # represents a single build
+  class Node < ActiveRecord::Base
+    after_create :notify_created
+
+    private
+
+    def notify_created
+      ActiveSupport::Notifications.instrument('node.created', build_id: build_id)
+    end
+  end
 end
