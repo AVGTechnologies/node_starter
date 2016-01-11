@@ -5,7 +5,6 @@ require 'node_starter/database'
 require 'sidekiq'
 require 'node_starter/workers/starter'
 
-
 # Namespace that handles git operations for NodeStarter
 module NodeStarter
   class << self
@@ -17,6 +16,7 @@ module NodeStarter
     def logger=(l)
       @logger = l
     end
+
     # rubocop:enable TrivialAccessors
     def config
       @config ||= NodeStarter::Config.new
