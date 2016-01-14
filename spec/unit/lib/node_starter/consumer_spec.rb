@@ -25,11 +25,9 @@ describe NodeStarter::Consumer do
   describe '#setup' do
     it 'starts listening to specified queue' do
       expect(Bunny).to receive(:new).with(
-        {
-          hostname: dummy_host,
-          username: dummy_user,
-          password: dummy_pass
-        }
+        hostname: dummy_host,
+        username: dummy_user,
+        password: dummy_pass
       ) do
         conn
       end
@@ -52,7 +50,7 @@ describe NodeStarter::Consumer do
     end
 
     it 'fails if queue is not initilized' do
-      expect { subject.read }.to raise_error { NodeStarter::Consumer::QueueNotInitilized }
+      expect { subject.read }.to raise_error { NodeStarter::Consumer::QueueNotInitialized }
     end
 
     it 'subscribes to queue' do
@@ -61,12 +59,6 @@ describe NodeStarter::Consumer do
 
       subject.setup
       subject.subscribe
-    end
-  end
-
-  describe '#close_connection' do
-    it 'raises error without setup' do
-      expect { subject.close_connection }.to raise_error { NoMethodError }
     end
   end
 end

@@ -7,9 +7,8 @@ class CreateNodes < ActiveRecord::Migration
       t.datetime :finished_at
       t.datetime :aborted_at
       t.string :status
-      t.integer :abort_attempts
-      t.boolean :killed
       t.string :path
+      t.string :uri
 
       t.timestamps null: false
     end
