@@ -29,7 +29,7 @@ module NodeStarter
     private
 
     def start
-      node = Models::Node.create!(
+      node = Node.create!(
         build_id: @config_values['id'],
         path: @dir,
         status: :created
