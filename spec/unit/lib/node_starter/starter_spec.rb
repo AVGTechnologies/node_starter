@@ -19,6 +19,7 @@ describe NodeStarter::Starter do
       allow(fake_node).to receive(:save!)
       NodeStarter.config['uss_node']['logs_storage_path'] = '/logs'
       NodeStarter.config['node_binary_name'] = 'binary_name'
+      NodeStarter.config['node_logs_file_name'] = 'debug.log'
     end
 
     it 'prepares binaries' do

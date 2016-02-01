@@ -67,7 +67,7 @@ module NodeStarter
     end
 
     def backup_logs
-      logs_path = File.join @dir, 'debug.log'
+      logs_path = File.join @dir, NodeStarter.config['node_logs_file_name']
       target_file_name = "#{@build_id}.log"
       target_path = File.join NodeStarter.config.uss_node.logs_storage_path, target_file_name
       if File.exist? logs_path
