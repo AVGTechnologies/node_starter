@@ -7,6 +7,8 @@ require 'rspec'
 require 'node_starter'
 require 'node_starter/queue_subscribe'
 require 'support/message_sender'
+require 'factory_girl'
+require 'factories'
 
 NodeStarter.setup
 
@@ -36,4 +38,6 @@ RSpec.configure do |config|
     # `true` in RSpec 4.
     mocks.verify_partial_doubles = true
   end
+
+  config.include FactoryGirl::Syntax::Methods
 end

@@ -7,6 +7,7 @@ require 'active_record/railtie'
 Bundler.require(*Rails.groups)
 
 module NS
+  # present just for support of db: commands
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -27,5 +28,6 @@ end
 
 $LOAD_PATH << 'lib'
 require 'node_starter'
+require 'node_starter/queue_subscribe'
 
 NodeStarter.setup

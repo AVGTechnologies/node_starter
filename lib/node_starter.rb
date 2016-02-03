@@ -1,9 +1,9 @@
 require 'logger'
 require 'node_starter/config'
 require 'node_starter/database'
-
-require 'sidekiq'
-require 'node_starter/workers/starter'
+require 'node_starter/killer'
+require 'node_starter/consumer'
+require 'node_starter/shutdown_consumer'
 
 # Namespace that handles git operations for NodeStarter
 module NodeStarter
@@ -34,16 +34,6 @@ module NodeStarter
       logger.level = config.log_level || Logger::WARN
 
       Database.connect
-
-      Sidekiq.logger = NodeStarter.logger
-
-      Sidekiq.configure_server do |config|
-        config.redis = NodeStarter.config.redis
-      end
-
-      Sidekiq.configure_client do |config|
-        config.redis = NodeStarter.config.redis
-      end
     end
 
     private

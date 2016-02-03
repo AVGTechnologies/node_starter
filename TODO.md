@@ -1,7 +1,9 @@
 TODO
 ====
 
-* when UssNode finish:
- * copy log
- * remove whole dir
-* Listen on commnad queue and handle `cancel`
+* implement crash/restart recovery
+  * load running nodes from DB on start
+  * delete not running nodes
+  * wait for running nodes
+  * register to receive kill command
+

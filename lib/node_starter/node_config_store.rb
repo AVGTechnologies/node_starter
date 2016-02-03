@@ -19,5 +19,9 @@ module NodeStarter
         f.puts ERB.new(template).result(binding)
       end
     end
+
+    def self.write_complete_file(path, data)
+      File.open("#{path}/config.xml", 'w+') { |f| f.puts data }
+    end
   end
 end

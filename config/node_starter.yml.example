@@ -9,6 +9,7 @@ default: &defaults
   bunny_user:                       guest
   bunny_password:                   guest
   max_running_uss_nodes:            1
+  shutdown_node_timeout_in_minutes: 60
   redis:
     url: redis://localhost:6379
     size: 3
@@ -20,6 +21,7 @@ default: &defaults
       uss_base_endpoint:            http://localhost:4567/UssEndpoint/
       ddtf_web_link:                https://ddtf-web-link
       artifact_storage_path:        /var/tmp/storage
+      logs_storage_path:            /var/tmp/logs
       uss_api_endpoint:             http://localhost:4567/UssEndpoint-Rest/
       uss_secure_api_endpoint:      https://localhost:7890/UssEndpoint-Rest/
       restart_protection_timeout:   00:20:00
