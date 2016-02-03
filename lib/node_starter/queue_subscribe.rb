@@ -39,7 +39,7 @@ module NodeStarter
 
     def subscribe_killer_queue
       @shutdown_consumer.subscribe do |delivery_info, _metadata, payload|
-        stop delivery_info, payload
+        stop delivery_info
       end
     end
 
