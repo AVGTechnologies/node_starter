@@ -68,7 +68,8 @@ module NodeStarter
     def stop(delivery_info)
       NodeStarter.logger.debug("Received kill command: #{delivery_info[:routing_key]}")
 
-      build_id = delivery_info[:routing_key].to_s.slice('cmd.')
+      build_id = delivery_info[:routing_key].to_s
+      build_id.slice!('cmd.')
 
       killer = NodeStarter::Killer.new build_id
       killer.shutdown
