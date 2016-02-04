@@ -10,10 +10,6 @@ default: &defaults
   bunny_password:                   guest
   max_running_uss_nodes:            1
   shutdown_node_timeout_in_minutes: 60
-  redis:
-    url: redis://localhost:6379
-    size: 3
-    namespace: node_starter
   uss_node:
       enqueued_by:                  someone
       proton_url_suffix:            Proton/
