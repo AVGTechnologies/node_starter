@@ -21,12 +21,12 @@ group :test, :development do
 end
 
 group :test do
-# TODO: investigate whether this gem is really needed
-# it causes problem running travis-ci tests
-# and when running on windows
-#  gem 'fakefs'  
+  # TODO: investigate whether this gem is really needed
+  # it causes problem running travis-ci tests
+  # and when running on windows
+  # gem 'fakefs'
 end
 
 group :development do
   gem 'rails', '4.2.3', require: false
-end 
+end

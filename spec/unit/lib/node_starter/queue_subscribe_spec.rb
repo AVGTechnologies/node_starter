@@ -161,9 +161,24 @@ describe NodeStarter::QueueSubscribe do
       it 'acknowledges the message' do
         expected_delivery_info = { routing_key: 'cmd.123' }
         expect(shutdown_consumer).to receive(:ack).with(expected_delivery_info)
-        subject.send :stop, expected_delivery_info
+        subject.send(:stop, expected_delivery_info, { 'stopped_by' => 'stopper' }.to_json)
+      end
+
+      it 'parses build_id' do
+        expected_delivery_info = { routing_key: 'cmd.456' }
+        expect(shutdown_consumer).to receive(:ack).with(expected_delivery_info)
+        expect(NodeStarter::Killer).to receive(:new).with('456', anything) { killer }
+
+        subject.send(:stop, expected_delivery_info, { 'stopped_by' => 'stopper' }.to_json)
+      end
+
+      it 'parses stooped_by' do
+        expected_delivery_info = { routing_key: 'cmd.456' }
+        expect(shutdown_consumer).to receive(:ack).with(expected_delivery_info)
+        expect(NodeStarter::Killer).to receive(:new).with(anything, 'stopper') { killer }
+
+        subject.send(:stop, expected_delivery_info, { 'stopped_by' => 'stopper' }.to_json)
       end
     end
   end
 end
-

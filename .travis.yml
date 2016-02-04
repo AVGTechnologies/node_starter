@@ -10,4 +10,6 @@ before_script: |
   mkdir /tmp/node_bin
   bundle exec rake db:create db:migrate --trace
 
-script: bundle exec rspec
+script:
+  - bundle exec rubocop
+  - bundle exec rspec
