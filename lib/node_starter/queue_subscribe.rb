@@ -39,7 +39,7 @@ module NodeStarter
 
     def subscribe_killer_queue
       @shutdown_consumer.subscribe do |delivery_info, _metadata, payload|
-        stop delivery_info
+        stop delivery_info, payload
       end
     end
 
@@ -65,13 +65,17 @@ module NodeStarter
       @consumer.ack(delivery_info)
     end
 
-    def stop(delivery_info)
+    def stop(delivery_info, payload)
       NodeStarter.logger.debug("Received kill command: #{delivery_info[:routing_key]}")
 
       build_id = delivery_info[:routing_key].to_s
       build_id.slice!('cmd.')
 
-      killer = NodeStarter::Killer.new build_id
+      params = parse(payload)
+
+      abort_by = params['stopped_by']
+
+      killer = NodeStarter::Killer.new build_id, abort_by
       killer.shutdown
 
       @shutdown_consumer.ack delivery_info

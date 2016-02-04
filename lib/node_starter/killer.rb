@@ -7,8 +7,9 @@ module NodeStarter
   class Killer
     attr_reader :build_id
 
-    def initialize(build_id)
+    def initialize(build_id, abort_by)
       @build_id = build_id
+      @abort_by = abort_by
     end
 
     def shutdown
@@ -26,7 +27,7 @@ module NodeStarter
       return false if uri.nil? || uri.empty?
       NodeStarter.logger.info "Shutting down node using URI #{uri}."
       node_api = NodeApi.new uri
-      result = node_api.stop
+      result = node_api.stop(@abort_by)
       fail "Node refused stop request with status #{result}." unless result == Net::HTTPSuccess
       NodeStarter.logger.info "Waiting for node with PID #{pid} to finish."
       Timeout.timeout(NodeStarter.config.shutdown_node_timeout_in_minutes) do
