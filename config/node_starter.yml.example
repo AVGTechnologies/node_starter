@@ -8,8 +8,10 @@ default: &defaults
   bunny_host:                       localhost
   bunny_user:                       guest
   bunny_password:                   guest
-  max_running_uss_nodes:            1
-  shutdown_node_timeout_in_minutes: 60
+  uss_node_queue_prefetch:          5
+  shutdown_node_wait_in_minutes:    60
+  shutdown_node_check_count:        5
+  shutdown_node_period_in_minutes:  10
   uss_node:
       enqueued_by:                  someone
       proton_url_suffix:            Proton/
@@ -38,6 +40,7 @@ default: &defaults
       cluster_name:                 cluster
       cluster_endpoint:             http://localhost:3333/cluster-endpoint/
       package_provider_endpoint:    http://localhost:4444/
+      package_provider_endpoint_v2: http://localhost/package_provider
       floating_rescheduled_period:  00:30:00.000
       unc_username:                 username
       unc_password:                 password

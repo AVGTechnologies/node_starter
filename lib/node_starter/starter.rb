@@ -5,12 +5,12 @@ require 'node_starter/prepare_binaries'
 module NodeStarter
   # class starting uss node process
   class Starter
-    attr_reader :build_id, :dir, :pid
+    attr_reader :build_id, :dir
 
     def initialize(build_id, config_values, enqueue_data, node_api_uri)
       @node_api_uri = node_api_uri
       @build_id = build_id
-      @config_values = config_values
+      @config_values = NodeStarter.config.uss_node.merge(config_values)
       @enqueue_data = enqueue_data
     end
 
@@ -18,11 +18,26 @@ module NodeStarter
       @dir = Dir.mktmpdir("uss_node_#{@build_id}")
       NodeStarter.logger.info "Node temporary directory: #{@dir}"
 
-      NodeStarter::NodeConfigStore.write_complete_file(dir, @config_values)
+      NodeStarter::NodeConfigStore.new(@config_values).write_to(dir)
       NodeStarter::EnqueueDataStore.write_to(dir, @enqueue_data)
       NodeStarter::PrepareBinaries.write_to(dir)
 
       start
+    end
+
+    def wait_node_process
+      begin
+        Process.wait @pid
+      rescue Errno::ECHILD
+        NodeStarter.logger.info("Node #{@build_id} with pid #{@pid} is not running")
+      end
+
+      NodeStarter.logger.info("Node #{@build_id} with pid #{@pid} finished.")
+
+      node = Node.find_by! build_id: @build_id
+      node.update_column :status, :finished
+
+      clean_up
     end
 
     private
@@ -34,30 +49,21 @@ module NodeStarter
         status: :created,
         uri: @node_api_uri
       )
-      node.save!
 
-      NodeStarter.logger.debug("starting node: #{node}")
+      NodeStarter.logger.debug("starting node: #{node.inspect}")
 
       dir = node.path
       node_executable_path = File.join(dir, NodeStarter.config.node_binary_name)
 
       command = "#{node_executable_path} --start -e #{dir}/enqueueData.bin -c #{dir}/config.xml"
-      pid = nil
+      @pid = nil
       IO.pipe do |_, w|
-        pid = Process.spawn(command, out: w)
+        @pid = Process.spawn(command, out: w)
       end
-      NodeStarter.logger.info("Node #{node.build_id} spawned in #{dir} with pid #{pid}")
+      NodeStarter.logger.info("Node #{node.build_id} spawned in #{dir} with pid #{@pid}")
 
-      node.status = :running
-      node.pid = pid
-      node.save!
-
-      Process.wait(pid)
-
-      node.status = :finished
-      node.save!
-
-      clean_up
+      node.update_column :status, :running
+      node.update_column :pid, @pid
     end
 
     def clean_up

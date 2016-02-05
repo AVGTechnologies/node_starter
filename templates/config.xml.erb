@@ -68,10 +68,10 @@
   <PackageProvider>
     <BaseAddress><%= @package_provider_endpoint %></BaseAddress>
   </PackageProvider>
-  <RubyPackageProvider>
-    <PackageProviderUri><%= @ruby_package_provider_endpoint %></PackageProviderUri>
+  <PackageProviderV2>
+    <PackageProviderUri><%= @package_provider_endpoint_v2 %></PackageProviderUri>
     <MaxTimeoutInMinutes>45</MaxTimeoutInMinutes>
-  </RubyPackageProvider>
+  </PackageProviderV2>
   <ResourceManagerProxy>
     <HasResource>false</HasResource>
   </ResourceManagerProxy>
@@ -102,7 +102,7 @@
     <GuestPath>c:\uss\scripts</GuestPath>
   </WholeWorkspaceWindowsInstallation>
   <WindowsInstallation>
-    <Username><%= @admin_username_windows %>administrator</Username>
+    <Username><%= @admin_username_windows %></Username>
     <Password><%= @admin_password_windows %></Password>
   </WindowsInstallation>
   <EmailFactory>

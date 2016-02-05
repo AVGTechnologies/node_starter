@@ -15,7 +15,7 @@ module NodeStarter
       @conn.start
 
       @channel = @conn.create_channel
-      @channel.prefetch(NodeStarter.config.max_running_uss_nodes)
+      @channel.prefetch(NodeStarter.config.uss_node_queue_prefetch)
 
       queue_params = {
         durable: true,
@@ -37,8 +37,16 @@ module NodeStarter
       end
     end
 
+    def close_connection
+      @channel.close
+    end
+
     def ack(delivery_info)
       @channel.ack(delivery_info.delivery_tag)
+    end
+
+    def reject(delivery_info, requeue)
+      @channel.reject(delivery_info.delivery_tag, requeue)
     end
   end
 end

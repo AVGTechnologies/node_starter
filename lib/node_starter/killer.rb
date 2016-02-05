@@ -5,64 +5,60 @@ require 'timeout'
 module NodeStarter
   # class killing running node process
   class Killer
-    attr_reader :build_id
-
-    def initialize(build_id, abort_by)
-      @build_id = build_id
-      @abort_by = abort_by
+    class NodeApiNotCalled < RuntimeError
     end
 
-    def shutdown
+    attr_reader :build_id
+
+    def initialize(build_id, stopped_by)
+      @build_id = build_id
+      @stopped_by = stopped_by
+    end
+
+    def shutdown_by_api
       node = Node.find_by! build_id: @build_id
+      @pid = node.pid
+
       node.update_column :status, :aborting
 
-      return if shutdown_using_api node.uri, node.pid
-      kill_process node.pid if running? node.pid
-      force_kill_process node.pid if running? node.pid
+      shutdown_using_api node.uri
+    end
+
+    def watch_process
+      fail NodeApiNotCalled, 'Run shutdown by api first' unless @pid
+      kill_process if running?
+      force_kill_process if running?
     end
 
     private
 
-    def shutdown_using_api(uri, pid)
+    def shutdown_using_api(uri)
       return false if uri.nil? || uri.empty?
       NodeStarter.logger.info "Shutting down node using URI #{uri}."
-      node_api = NodeApi.new uri
-      result = node_api.stop(@abort_by)
-      fail "Node refused stop request with status #{result}." unless result == Net::HTTPSuccess
-      NodeStarter.logger.info "Waiting for node with PID #{pid} to finish."
-      Timeout.timeout(NodeStarter.config.shutdown_node_timeout_in_minutes) do
-        Process.wait pid
-      end
-      NodeStarter.logger.info "Node with PID #{pid} finished."
-      true
-    rescue TimeoutError
-      NodeStarter.logger.warn "Node shutdown request timed out. Address: #{uri}"
-      false
-    rescue => e
-      NodeStarter.logger.error e
-      false
+      result = NodeApi.new(uri).stop(@stopped_by)
+
+      NodeStarter.logger.error "Shutdown failed: #{result.inspect}" unless result.is_a?(Net::HTTPOK)
     end
 
-    def kill_process(pid)
-      NodeStarter.logger.debug("Killing process #{pid} of node with build_id #{@build_id}")
-      5.times.with_index do |i|
-        unless running? pid
-          NodeStarter.logger.debug("Node #{@build_id} terminated.")
+    def kill_process
+      NodeStarter.logger.debug("Checking process #{@pid} of node with build_id #{@build_id}")
+      NodeStarter.config.shutdown_node_check_count.times.with_index do |i|
+        unless running?
+          NodeStarter.logger.debug("Node #{@build_id} finished after #{i} attempts")
           break
         end
         NodeStarter.logger.debug("Node #{@build_id} still alive after #{i + 1} attempts")
-        Process.kill('INT', pid)
-        sleep 300
+        sleep NodeStarter.config.shutdown_node_period_in_minutes.minutes
       end
     end
 
-    def force_kill_process(pid)
+    def force_kill_process
       NodeStarter.logger.info("Force killing node #{@build_id}")
-      Process.kill('KILL', pid)
+      Process.kill('KILL', @pid)
     end
 
-    def running?(pid)
-      !Sys::ProcTable.ps(pid).nil?
+    def running?
+      !Sys::ProcTable.ps(@pid).nil?
     end
   end
 end
