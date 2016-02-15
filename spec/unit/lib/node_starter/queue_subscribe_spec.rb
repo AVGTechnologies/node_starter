@@ -85,55 +85,46 @@ describe NodeStarter::QueueSubscribe do
       allow(starter).to receive :start_node_process
     end
 
-    shared_examples_for 'a runner' do |expected_exception|
-      def send_run
-        subject.send :run, {}, payload.to_json
-      end
-
-      def run(exception)
-        if exception
-          expect { send_run }.to raise_error exception
-        else
-          send_run
-        end
-      end
-
-      it 'registers node to shutdown queue' do
-        expect(shutdown_consumer).to receive(:register_node).with(payload[:build_id])
-        run expected_exception
-      end
-
-      it 'unregisters node from shutdown queue' do
-        expect(shutdown_consumer).to receive(:unregister_node).with(payload[:build_id])
-        run expected_exception
-      end
-
-      it 'runs node' do
-        expect(starter).to receive :start_node_process
-        run expected_exception
-      end
-    end
-
     context 'when node starter throws' do
-      it_behaves_like 'a runner', TestError
-
       before do
-        starter.stub(:start_node_process) { fail TestError }
+        allow(starter).to receive(:start_node_process) { fail TestError }
       end
 
-      it 'does not acknowledge the message' do
+      it 'does not acknowledge and rejects the message' do
         expect(consumer).to receive(:ack).exactly(0).times
-        expect { subject.send :run, {}, '{}' }.to raise_error
+        expect(consumer).to receive(:reject).exactly(1).times
+        subject.send :run, {}, '{}'
       end
     end
 
     context 'when node starter does not throw' do
-      it_behaves_like 'a runner'
+      def send_run(delivery_info = '')
+        subject.send :run, delivery_info, payload.to_json
+      end
+
+      it 'registers node to shutdown queue' do
+        expect(shutdown_consumer).to receive(:register_node).with(payload[:build_id])
+        send_run
+        sleep 0.1
+      end
+
+      it 'unregisters node from shutdown queue' do
+        expect(shutdown_consumer).to receive(:unregister_node).with(payload[:build_id])
+        send_run
+        sleep 0.1
+      end
+
+      it 'runs node' do
+        expect(starter).to receive :start_node_process
+        send_run
+        sleep 0.1
+      end
 
       it 'acknowledges the message' do
         expected_delivery_info = 'pizza is here'
         expect(consumer).to receive(:ack).with(expected_delivery_info)
-        subject.send :run, expected_delivery_info, '{}'
+        send_run(expected_delivery_info)
+        sleep 0.1
       end
     end
   end
@@ -142,19 +133,8 @@ describe NodeStarter::QueueSubscribe do
     let(:killer) { double('killer') }
 
     before do
-      allow(killer).to receive :shutdown
+      allow(killer).to receive :shutdown_by_api
       allow(NodeStarter::Killer).to receive(:new) { killer }
-    end
-
-    context 'when node killer throws' do
-      before do
-        killer.stub(:shutdown) { fail }
-      end
-
-      it 'does not acknowledge the message' do
-        expect(shutdown_consumer).to receive(:ack).exactly(0).times
-        expect { subject.send :stop, {}, {} }.to raise_error
-      end
     end
 
     context 'when node killer does not throw' do
@@ -162,6 +142,7 @@ describe NodeStarter::QueueSubscribe do
         expected_delivery_info = { routing_key: 'cmd.123' }
         expect(shutdown_consumer).to receive(:ack).with(expected_delivery_info)
         subject.send(:stop, expected_delivery_info, { 'stopped_by' => 'stopper' }.to_json)
+        sleep 0.1
       end
 
       it 'parses build_id' do
@@ -170,6 +151,7 @@ describe NodeStarter::QueueSubscribe do
         expect(NodeStarter::Killer).to receive(:new).with('456', anything) { killer }
 
         subject.send(:stop, expected_delivery_info, { 'stopped_by' => 'stopper' }.to_json)
+        sleep 0.1
       end
 
       it 'parses stooped_by' do
@@ -178,6 +160,7 @@ describe NodeStarter::QueueSubscribe do
         expect(NodeStarter::Killer).to receive(:new).with(anything, 'stopper') { killer }
 
         subject.send(:stop, expected_delivery_info, { 'stopped_by' => 'stopper' }.to_json)
+        sleep 0.1
       end
     end
   end

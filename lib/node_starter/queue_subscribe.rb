@@ -21,6 +21,7 @@ module NodeStarter
     end
 
     def stop_listening
+      NodeStarter.logger.info('Stopping listening. Bye, bye.')
       @consumer.close_connection
       @shutdown_consumer.close_connection
     end
@@ -45,40 +46,53 @@ module NodeStarter
 
     def run(delivery_info, payload)
       params = parse(payload)
-      NodeStarter.logger.debug("Received START with build_id: #{params['build_id']}")
+      NodeStarter.logger.info("Received START with build_id: #{params['build_id']}")
       # config and enqueue_data as raw xml
       # TODO: make a better payload model
       starter = NodeStarter::Starter.new(
         params['build_id'], params['config'], params['enqueue_data'], params['node_api_uri'])
 
-      @shutdown_consumer.register_node(params['build_id'])
-
       begin
         starter.start_node_process
+        @consumer.ack(delivery_info)
+        @shutdown_consumer.register_node(params['build_id'])
       rescue => e
-        NodeStarter.logger.error e
-        raise e
-      ensure
-        @shutdown_consumer.unregister_node(params['build_id'])
+        NodeStarter.logger.error "Node #{params['build_id']} spawn failed: #{e}"
+        @consumer.reject(delivery_info, true)
+        return
       end
 
-      @consumer.ack(delivery_info)
+      Thread.new do
+        begin
+          starter.wait_node_process
+        ensure
+          @shutdown_consumer.unregister_node(params['build_id'])
+        end
+      end
     end
 
     def stop(delivery_info, payload)
-      NodeStarter.logger.debug("Received kill command: #{delivery_info[:routing_key]}")
+      NodeStarter.logger.info("Received kill command: #{delivery_info[:routing_key]}")
 
       build_id = delivery_info[:routing_key].to_s
       build_id.slice!('cmd.')
 
       params = parse(payload)
 
-      abort_by = params['stopped_by']
+      stopped_by = params['stopped_by']
 
-      killer = NodeStarter::Killer.new build_id, abort_by
-      killer.shutdown
-
+      killer = NodeStarter::Killer.new build_id, stopped_by
+      killer.shutdown_by_api
       @shutdown_consumer.ack delivery_info
+
+      Thread.new do
+        mins = NodeStarter.config.shutdown_node_wait_in_minutes
+        NodeStarter.logger.debug(
+          "Waiting #{mins} minutes before starting killing node #{build_id}")
+        sleep NodeStarter.config.mins.minutes
+
+        killer.watch_process
+      end
     end
   end
 end

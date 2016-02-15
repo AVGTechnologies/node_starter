@@ -52,6 +52,10 @@ module NodeStarter
       end
     end
 
+    def close_connection
+      @channel.close
+    end
+
     def ack(delivery_info)
       @channel.ack(delivery_info.delivery_tag)
     end

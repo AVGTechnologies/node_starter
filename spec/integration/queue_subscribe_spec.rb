@@ -20,12 +20,21 @@ end
 
 describe 'NodeStarter::Subscribe integration' do
   let(:subject) { NodeStarter::QueueSubscribe.new }
+  let(:tmp_dir) { '/tmp/uss_node_temp_dir_123456' }
   let(:fake_consumer) { FakeConsumer.new }
   let(:fake_shutdown_consumer) do
     double('fake shutdown consumer',
            setup: {},
            subscribe: {}
           )
+  end
+
+  before(:each) do
+    FileUtils.mkdir(tmp_dir)
+  end
+
+  after(:each) do
+    FileUtils.rm_rf(tmp_dir)
   end
 
   it 'starts node process' do
@@ -39,6 +48,7 @@ describe 'NodeStarter::Subscribe integration' do
 
     allow(fake_shutdown_consumer).to receive('@queue'.to_sym) { double('fake queue') }
     allow(fake_shutdown_consumer).to receive(:register_node)
+    allow(Dir).to receive(:mktmpdir) { tmp_dir }
 
     subject.start_listening
 

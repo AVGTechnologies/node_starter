@@ -5,4 +5,7 @@ require 'node_starter/queue_subscribe'
 
 NodeStarter.setup
 
-NodeStarter::QueueSubscribe.new.start_listening
+File.write('.pid', "#{Process.pid}")
+
+subscriber = NodeStarter::QueueSubscribe.new
+subscriber.start_listening
