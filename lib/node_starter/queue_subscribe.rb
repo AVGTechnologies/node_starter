@@ -89,7 +89,7 @@ module NodeStarter
         mins = NodeStarter.config.shutdown_node_wait_in_minutes
         NodeStarter.logger.debug(
           "Waiting #{mins} minutes before starting killing node #{build_id}")
-        sleep NodeStarter.config.mins.minutes
+        sleep mins.minutes
 
         killer.watch_process
       end
