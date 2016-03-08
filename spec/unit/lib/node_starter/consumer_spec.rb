@@ -3,8 +3,10 @@ describe NodeStarter::Consumer do
   let(:conn) { double(:conn) }
   let(:channel) { double(:channel) }
   let(:dummy_host) { 'foo' }
-  let(:dummy_user) { 'guest' }
+  let(:dummy_port) { 156_72 }
+  let(:dummy_username) { 'guest' }
   let(:dummy_pass) { 'guest' }
+  let(:dummy_vhost) { '/' }
   let(:dummy_queue) { 'test-queue' }
   let(:channel_prefetch) { 1 }
 
@@ -15,9 +17,15 @@ describe NodeStarter::Consumer do
     allow(channel).to receive(:prefetch).with(any_args)
 
     allow(Bunny).to receive(:new) { conn }
-    allow(NodeStarter).to receive_message_chain(:config, :bunny_host).and_return(dummy_host)
-    allow(NodeStarter).to receive_message_chain(:config, :bunny_user).and_return(dummy_user)
-    allow(NodeStarter).to receive_message_chain(:config, :bunny_password).and_return(dummy_pass)
+    allow(NodeStarter).to receive_message_chain(:config, :amqp).and_return(
+      double(
+        'amqp_config',
+        host:     dummy_host,
+        port:     dummy_port,
+        username: dummy_username,
+        password: dummy_pass,
+        vhost:    dummy_vhost))
+
     allow(NodeStarter).to receive_message_chain(:config, :max_running_uss_nodes).and_return(1)
     allow(NodeStarter).to receive_message_chain(:config, :uss_node_queue_prefetch)
       .and_return(channel_prefetch)
@@ -29,8 +37,10 @@ describe NodeStarter::Consumer do
     it 'creates connection' do
       expect(Bunny).to receive(:new).with(
         hostname: dummy_host,
-        username: dummy_user,
-        password: dummy_pass
+        port:     dummy_port,
+        username: dummy_username,
+        password: dummy_pass,
+        vhost:    dummy_vhost
       ) do
         conn
       end

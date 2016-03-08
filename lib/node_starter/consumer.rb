@@ -8,10 +8,12 @@ module NodeStarter
 
     def setup
       @conn = Bunny.new(
-        hostname: NodeStarter.config.bunny_host,
-        username: NodeStarter.config.bunny_user,
-        password: NodeStarter.config.bunny_password
-      )
+        hostname: NodeStarter.config.amqp.host,
+        port:     NodeStarter.config.amqp.port,
+        username: NodeStarter.config.amqp.username,
+        password: NodeStarter.config.amqp.password,
+        vhost:    NodeStarter.config.amqp.vhost)
+
       @conn.start
 
       @channel = @conn.create_channel
