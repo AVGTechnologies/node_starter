@@ -49,7 +49,7 @@ module NodeStarter
     def subscribe
       fail QueueNotInitialized unless @queue
 
-      NodeStarter.logger.debug('Waiting for messages in cmd_queue.')
+      NodeStarter.logger.debug("Waiting for messages in #{NodeStarter.config.stop_uss_node_queue_name}.")
       opts = {
         manual_ack: true,
         block: true
