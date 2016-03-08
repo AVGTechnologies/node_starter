@@ -1,11 +1,11 @@
 Metrics/MethodLength:
-  Max: 25
+  Max: 30
 
 Metrics/LineLength:
   Max: 100
 
 Metrics/AbcSize:
-  Max: 25
+  Max: 27
 
 AllCops:
   Exclude:

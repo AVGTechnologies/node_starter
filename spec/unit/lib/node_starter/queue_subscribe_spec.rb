@@ -126,11 +126,20 @@ describe NodeStarter::QueueSubscribe do
         send_run(expected_delivery_info)
         sleep 0.1
       end
+
+      it 'sends nack on invalid input' do
+        expect(consumer).to receive(:reject).exactly(1).times
+        subject.send :run, {}, '{'
+        sleep 0.1
+      end
     end
   end
 
   describe '#stop' do
     let(:killer) { double('killer') }
+    let(:expected_delivery_info) do
+      { routing_key: 'cmd.123' }
+    end
 
     before do
       allow(killer).to receive :shutdown_by_api
@@ -139,27 +148,32 @@ describe NodeStarter::QueueSubscribe do
 
     context 'when node killer does not throw' do
       it 'acknowledges the message' do
-        expected_delivery_info = { routing_key: 'cmd.123' }
         expect(shutdown_consumer).to receive(:ack).with(expected_delivery_info)
+
         subject.send(:stop, expected_delivery_info, { 'stopped_by' => 'stopper' }.to_json)
         sleep 0.1
       end
 
       it 'parses build_id' do
-        expected_delivery_info = { routing_key: 'cmd.456' }
         expect(shutdown_consumer).to receive(:ack).with(expected_delivery_info)
-        expect(NodeStarter::Killer).to receive(:new).with('456', anything) { killer }
+        expect(NodeStarter::Killer).to receive(:new).with('123', anything) { killer }
 
         subject.send(:stop, expected_delivery_info, { 'stopped_by' => 'stopper' }.to_json)
         sleep 0.1
       end
 
       it 'parses stooped_by' do
-        expected_delivery_info = { routing_key: 'cmd.456' }
         expect(shutdown_consumer).to receive(:ack).with(expected_delivery_info)
         expect(NodeStarter::Killer).to receive(:new).with(anything, 'stopper') { killer }
 
         subject.send(:stop, expected_delivery_info, { 'stopped_by' => 'stopper' }.to_json)
+        sleep 0.1
+      end
+
+      it 'sends nack on invalid input' do
+        expect(shutdown_consumer).to receive(:reject).exactly(1).times
+
+        subject.send(:stop, expected_delivery_info, '{')
         sleep 0.1
       end
     end

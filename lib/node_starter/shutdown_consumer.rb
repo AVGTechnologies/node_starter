@@ -67,5 +67,9 @@ module NodeStarter
     def ack(delivery_info)
       @channel.ack(delivery_info.delivery_tag)
     end
+
+    def reject(delivery_info, requeue)
+      @channel.reject(delivery_info.delivery_tag, requeue)
+    end
   end
 end
