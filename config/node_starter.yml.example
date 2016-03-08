@@ -10,41 +10,41 @@ default: &defaults
   shutdown_node_check_count:        5
   shutdown_node_period_in_minutes:  10
   uss_node:
-      enqueued_by:                  someone
-      proton_url_suffix:            Proton/
-      base_address:                 http://localhost:1234/BaseAddress/
-      uss_base_endpoint:            http://localhost:4567/UssEndpoint/
-      ddtf_web_link:                https://ddtf-web-link
-      artifact_storage_path:        /var/tmp/storage
-      logs_storage_path:            /var/tmp/logs
-      uss_api_endpoint:             http://localhost:4567/UssEndpoint-Rest/
-      uss_secure_api_endpoint:      https://localhost:7890/UssEndpoint-Rest/
-      restart_protection_timeout:   00:20:00
-      scenario_instaces_dir_path:   /var/tmp/scenario_instances
-      db4o_result_host:             1.1.1.1
-      db4o_result_port:             8080
-      db4o_result_username:         username
-      db4o_result_password:         password
-      db4o_definition_host:         2.2.2.2
-      db4o_definition_port:         9090
-      db4o_definition_username:     username
-      db4o_definition_password:     password
-      final_ci_endpoint:            http://final-ci-endpoint
-      final_ci_timeout:             5000
-      storage_ip_address:           3.3.3.3
-      resource_pool_name:           PoolName
-      use_machine_pool:             true
-      cluster_name:                 cluster
-      cluster_endpoint:             http://localhost:3333/cluster-endpoint/
-      package_provider_endpoint:    http://localhost:4444/
-      package_provider_endpoint_v2: http://localhost/package_provider
-      floating_rescheduled_period:  00:30:00.000
-      unc_username:                 username
-      unc_password:                 password
-      admin_username_unix:          username
-      admin_password_unix:          password
-      admin_username_windows:       username
-      admin_password_windows:       password
+    enqueued_by:                  someone
+    proton_url_suffix:            Proton/
+    base_address:                 http://localhost:1234/BaseAddress/
+    uss_base_endpoint:            http://localhost:4567/UssEndpoint/
+    ddtf_web_link:                https://ddtf-web-link
+    artifact_storage_path:        /var/tmp/storage
+    logs_storage_path:            /var/tmp/logs
+    uss_api_endpoint:             http://localhost:4567/UssEndpoint-Rest/
+    uss_secure_api_endpoint:      https://localhost:7890/UssEndpoint-Rest/
+    restart_protection_timeout:   00:20:00
+    scenario_instaces_dir_path:   /var/tmp/scenario_instances
+    db4o_result_host:             1.1.1.1
+    db4o_result_port:             8080
+    db4o_result_username:         username
+    db4o_result_password:         password
+    db4o_definition_host:         2.2.2.2
+    db4o_definition_port:         9090
+    db4o_definition_username:     username
+    db4o_definition_password:     password
+    final_ci_endpoint:            http://final-ci-endpoint
+    final_ci_timeout:             5000
+    storage_ip_address:           3.3.3.3
+    resource_pool_name:           PoolName
+    use_machine_pool:             true
+    cluster_name:                 cluster
+    cluster_endpoint:             http://localhost:3333/cluster-endpoint/
+    package_provider_endpoint:    http://localhost:4444/
+    package_provider_endpoint_v2: http://localhost/package_provider
+    floating_rescheduled_period:  00:30:00.000
+    unc_username:                 username
+    unc_password:                 password
+    admin_username_unix:          username
+    admin_password_unix:          password
+    admin_username_windows:       username
+    admin_password_windows:       password
   amqp:
     host:                           localhost
     port:                           15672

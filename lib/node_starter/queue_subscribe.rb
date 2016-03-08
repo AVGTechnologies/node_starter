@@ -45,10 +45,17 @@ module NodeStarter
     end
 
     def run(delivery_info, payload)
-      params = parse(payload)
+      begin
+        params = parse(payload)
+      rescue JSON::ParserError
+        NodeStarter.logger.error "Node input incorrect. Message nacked. input: #{payload}"
+        @consumer.reject(delivery_info, false)
+      end
+
+      return unless params
+
       NodeStarter.logger.info("Received START with build_id: #{params['build_id']}")
-      # config and enqueue_data as raw xml
-      # TODO: make a better payload model
+
       starter = NodeStarter::Starter.new(
         params['build_id'], params['config'], params['enqueue_data'], params['node_api_uri'])
 
@@ -74,16 +81,24 @@ module NodeStarter
     def stop(delivery_info, payload)
       NodeStarter.logger.info("Received kill command: #{delivery_info[:routing_key]}")
 
-      build_id = delivery_info[:routing_key].to_s
-      build_id.slice!('cmd.')
+      begin
+        build_id = delivery_info[:routing_key].to_s
+        build_id.slice!('cmd.')
 
-      params = parse(payload)
+        params = parse(payload)
 
-      stopped_by = params['stopped_by']
+        stopped_by = params['stopped_by']
 
-      killer = NodeStarter::Killer.new build_id, stopped_by
-      killer.shutdown_by_api
-      @shutdown_consumer.ack delivery_info
+        killer = NodeStarter::Killer.new build_id, stopped_by
+        killer.shutdown_by_api
+        @shutdown_consumer.ack delivery_info
+      rescue JSON::ParserError
+        NodeStarter.logger.error "Node stop input incorrect. Message nacked. input: #{payload}"
+        @shutdown_consumer.reject(delivery_info, false)
+      rescue
+        NodeStarter.logger.error "Node stop failed: #{e}"
+        @shutdown_consumer.reject(delivery_info, false)
+      end
 
       Thread.new do
         mins = NodeStarter.config.shutdown_node_wait_in_minutes
