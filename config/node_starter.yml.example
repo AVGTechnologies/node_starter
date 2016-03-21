@@ -45,6 +45,19 @@ default: &defaults
     admin_password_unix:          password
     admin_username_windows:       username
     admin_password_windows:       password
+    rabbit_logs_username:         username
+    rabbit_logs_password:         password
+    rabbit_logs_address:          localhost
+    rabbit_logs_port:             5672
+    rabbit_logs_virtual_host:     host
+    rabbit_finalci_username:      username
+    rabbit_finalci_password:      password
+    rabbit_finalci_address:       localhost
+    rabbit_finalci_port:          5672
+    rabbit_finalci_virtual_host:  host
+    rabbit_finalci_exchange:      reporting
+    rabbit_finalci_routing_key:   reporting.builds.builds
+    rabbit_finalci_error_type:    build:error
   amqp:
     host:                           localhost
     port:                           15672
