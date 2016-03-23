@@ -23,7 +23,7 @@ module NodeStarter
         durable: true,
         auto_delete: false
       }
-      @queue = @channel.queue(NodeStarter.config.start_uss_node_queue_name, queue_params)
+      @queue = @channel.queue(NodeStarter.config.amqp.start_uss_node_queue_name, queue_params)
     end
 
     def subscribe

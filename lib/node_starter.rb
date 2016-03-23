@@ -4,6 +4,7 @@ require 'node_starter/database'
 require 'node_starter/killer'
 require 'node_starter/consumer'
 require 'node_starter/shutdown_consumer'
+require 'node_starter/reporting_publisher'
 
 # Namespace that handles git operations for NodeStarter
 module NodeStarter
