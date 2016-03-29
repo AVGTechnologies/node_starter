@@ -74,7 +74,7 @@ describe NodeStarter::QueueSubscribe do
   end
 
   describe '#run' do
-    let(:payload) { { build_id: 123 } }
+    let(:payload) { { build_id: 123, config: {} } }
     let(:starter) { double('starter') }
 
     before do
@@ -93,11 +93,16 @@ describe NodeStarter::QueueSubscribe do
       it 'does not acknowledge and rejects the message' do
         expect(consumer).to receive(:ack).exactly(0).times
         expect(consumer).to receive(:reject).exactly(1).times
-        subject.send :run, {}, '{}'
+        subject.send :run, {}, { config: {} }.to_json
       end
     end
 
     context 'when node starter does not throw' do
+      before do
+        allow(SecureRandom).to receive(:uuid) { 'xuuq' }
+        allow(subject).to receive(:ip_address) { 'xuq' }
+      end
+
       def send_run(delivery_info = '')
         subject.send :run, delivery_info, payload.to_json
       end
@@ -131,6 +136,21 @@ describe NodeStarter::QueueSubscribe do
         expect(consumer).to receive(:reject).exactly(1).times
         subject.send :run, {}, '{'
         sleep 0.1
+      end
+
+      it 'generates node api address' do
+        subject.send :run, {}, { config: {} }.to_json
+        expect(NodeStarter::Starter).to have_received(:new) do |_, __, ___, node_api_uri|
+          expect(node_api_uri).to eq 'http://xuq:8732/xuuq/api/'
+        end
+      end
+
+      it 'extends node configuration' do
+        subject.send :run, {}, { config: {} }.to_json
+        expect(NodeStarter::Starter).to have_received(:new) do |_, config, __, ___|
+          expect(config[:id]).to eq 'xuuq'
+          expect(config[:base_address]).to eq 'http://xuq:8732/AVG.Ddtf.Uss/Node/xuuq'
+        end
       end
     end
   end

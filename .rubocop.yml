@@ -5,7 +5,7 @@ Metrics/LineLength:
   Max: 100
 
 Metrics/AbcSize:
-  Max: 27
+  Max: 28
 
 AllCops:
   Exclude:
