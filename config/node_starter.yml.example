@@ -30,6 +30,7 @@ default: &defaults
     db4o_definition_username:     username
     db4o_definition_password:     password
     final_ci_endpoint:            http://final-ci-endpoint
+    guest_api_endpoint:           http://guest-api-endpoint
     final_ci_timeout:             5000
     storage_ip_address:           3.3.3.3
     resource_pool_name:           PoolName
