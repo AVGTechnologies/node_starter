@@ -37,7 +37,8 @@ describe NodeStarter::Killer do
     before(:each) do
       subject.send :instance_variable_set, '@pid', 1
       allow(subject).to receive(:sleep)
-      allow(NodeStarter.config).to receive(:shutdown_node_check_count) { 2 }
+      NodeStarter.config['shutdown_node_check_count'] = 2
+      NodeStarter.config['shutdown_node_period_in_minutes'] = 1
     end
 
     it 'fails if node api was not called first' do

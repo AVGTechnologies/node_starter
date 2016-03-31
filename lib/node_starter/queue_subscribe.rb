@@ -1,4 +1,5 @@
 require 'multi_json'
+require 'socket'
 
 require 'node_starter/starter'
 require 'node_starter/consumer'
@@ -55,9 +56,13 @@ module NodeStarter
       return unless params
 
       NodeStarter.logger.info("Received START with build_id: #{params['build_id']}")
+      uuid = SecureRandom.uuid
 
       starter = NodeStarter::Starter.new(
-        params['build_id'], params['config'], params['enqueue_data'], params['node_api_uri'])
+        params['build_id'],
+        params['config'].merge(node_config_extension(uuid)),
+        params['enqueue_data'],
+        node_api_address(uuid))
 
       begin
         starter.start_node_process
@@ -108,6 +113,21 @@ module NodeStarter
 
         killer.watch_process
       end
+    end
+
+    def node_config_extension(uuid)
+      {
+        id: uuid,
+        base_address: 'http://' + ip_address + ':8732/AVG.Ddtf.Uss/Node/' + uuid
+      }
+    end
+
+    def ip_address
+      Socket.ip_address_list.detect(&:ipv4_private?).ip_address
+    end
+
+    def node_api_address(uuid)
+      'http://' + ip_address + ':8732/' + uuid + '/api/'
     end
   end
 end
