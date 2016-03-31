@@ -7,5 +7,5 @@ NodeStarter.setup
 
 File.write('.pid', "#{Process.pid}")
 
-subscriber = NodeStarter::QueueSubscribe.new
+subscriber = NodeStarter::QueueSubscribe.new(ARGV[0])
 subscriber.start_listening

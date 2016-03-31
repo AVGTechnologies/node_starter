@@ -2,7 +2,7 @@ class TestError < StandardError
 end
 
 describe NodeStarter::QueueSubscribe do
-  let(:subject) { NodeStarter::QueueSubscribe.new }
+  let(:subject) { NodeStarter::QueueSubscribe.new('environment_name') }
   let(:consumer) do
     double('consumer',
            setup: {},
@@ -24,12 +24,12 @@ describe NodeStarter::QueueSubscribe do
   describe '#initialize' do
     it 'creates starter consumer' do
       expect(NodeStarter::Consumer).to receive :new
-      NodeStarter::QueueSubscribe.new
+      NodeStarter::QueueSubscribe.new('environment_name')
     end
 
     it 'creates shutdown consumer' do
       expect(NodeStarter::ShutdownConsumer).to receive :new
-      NodeStarter::QueueSubscribe.new
+      NodeStarter::QueueSubscribe.new('environment_name')
     end
   end
 

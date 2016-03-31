@@ -7,7 +7,8 @@ module NodeStarter
   class Starter
     attr_reader :build_id, :dir
 
-    def initialize(build_id, config_values, enqueue_data, node_api_uri)
+    def initialize(build_id, config_values, enqueue_data, node_api_uri, environment_name)
+      @environment_name = environment_name
       @node_api_uri = node_api_uri
       @build_id = build_id
       @config_values = NodeStarter.config.uss_node.merge(config_values)
@@ -15,7 +16,7 @@ module NodeStarter
     end
 
     def start_node_process
-      @dir = Dir.mktmpdir("uss_node_#{@build_id}")
+      @dir = Dir.mktmpdir("#{@environment_name}_#{@build_id}_")
       NodeStarter.logger.info "Node temporary directory: #{@dir}"
 
       NodeStarter::NodeConfigStore.new(@config_values).write_to(dir)

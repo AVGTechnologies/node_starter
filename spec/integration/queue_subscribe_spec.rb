@@ -19,8 +19,8 @@ class FakeConsumer
 end
 
 describe 'NodeStarter::Subscribe integration' do
-  let(:subject) { NodeStarter::QueueSubscribe.new }
-  let(:tmp_dir) { '/tmp/uss_node_temp_dir_123456' }
+  let(:subject) { NodeStarter::QueueSubscribe.new('environment_name') }
+  let(:tmp_dir) { '/tmp/environment_name_temp_dir_123456' }
   let(:fake_consumer) { FakeConsumer.new }
   let(:fake_shutdown_consumer) do
     double('fake shutdown consumer',

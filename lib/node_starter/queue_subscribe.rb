@@ -7,7 +7,10 @@ require 'node_starter/shutdown_consumer'
 module NodeStarter
   # class for receiving start node messages
   class QueueSubscribe
-    def initialize
+    attr_reader :environment_name
+
+    def initialize(environment_name)
+      @environment_name = environment_name
       @consumer = NodeStarter::Consumer.new
       @shutdown_consumer = NodeStarter::ShutdownConsumer.new
     end
@@ -57,7 +60,7 @@ module NodeStarter
       NodeStarter.logger.info("Received START with build_id: #{params['build_id']}")
 
       starter = NodeStarter::Starter.new(
-        params['build_id'], params['config'], params['enqueue_data'], params['node_api_uri'])
+        params['build_id'], params['config'], params['enqueue_data'], params['node_api_uri'], environment_name)
 
       begin
         starter.start_node_process

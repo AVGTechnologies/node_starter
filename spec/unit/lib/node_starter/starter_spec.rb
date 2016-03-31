@@ -1,6 +1,6 @@
 describe NodeStarter::Starter do
   let(:subject) do
-    NodeStarter::Starter.new('123', {}, {}, 'node_api_uri')
+    NodeStarter::Starter.new('123', {}, {}, 'node_api_uri', 'environment_name')
   end
   let(:tmp_dir) { '/tmpdir' }
 
