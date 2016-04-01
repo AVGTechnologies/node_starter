@@ -1,4 +1,5 @@
 default: &defaults
+  uss_node_folder_prefix:           uss_node  
   node_binaries_path:               /tmp/node_bin
   node_binary_name:                 AVG.Ddtf.UssNode.exe
   config_template_path:             /templates/config.xml.erb

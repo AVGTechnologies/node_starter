@@ -15,7 +15,7 @@ module NodeStarter
     end
 
     def start_node_process
-      @dir = Dir.mktmpdir("uss_node_#{@build_id}")
+      @dir = Dir.mktmpdir("#{NodeStarter.config.uss_node_folder_prefix}_#{@build_id}_")
       NodeStarter.logger.info "Node temporary directory: #{@dir}"
 
       NodeStarter::NodeConfigStore.new(@config_values).write_to(dir)
