@@ -33,9 +33,10 @@ module NodeStarter
     private
 
     def shutdown_using_api(uri)
-      return false if uri.nil? || uri.empty?
+      return if uri.to_s.empty?
+
       NodeStarter.logger.info "Shutting down node using URI #{uri}."
-      result = NodeApi.new(uri).stop(@stopped_by)
+      result = api_response(uri)
 
       NodeStarter.logger.error "Shutdown failed: #{result.inspect}" unless result.is_a?(Net::HTTPOK)
     end
@@ -59,6 +60,19 @@ module NodeStarter
 
     def running?
       !Sys::ProcTable.ps(@pid).nil?
+    end
+
+    private
+
+    def api_response(uri)
+      result = nil
+      NodeStarter.config.shutdown_node_api_calls.each do |sleep_time|
+        result = NodeApi.new(uri).stop(@stopped_by)
+        break if result == Net::HTTPOK
+        sleep sleep_time
+      end
+
+      result
     end
   end
 end

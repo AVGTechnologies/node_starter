@@ -1,15 +1,29 @@
+amqp: &amqp
+  host:                           localhost
+  port:                           15672
+  username:                       guest
+  password:                       guest
+  vhost:                          /
+  start_uss_node_queue_name:      builds.windows.ussnode
+  stop_uss_node_queue_name:       commands.windows.ussnode
+  uss_node_queue_prefetch:        5
+  build_reporting_exchange:       reporting
+  build_reporting_routing_key:    reporting.builds.builds
+  build_receive_message_type:     build:receive
+  build_start_message_type:       build:start
+  build_error_message_type:       build:error
+
 default: &defaults
-  uss_node_folder_prefix:           uss_node  
+  uss_node_folder_prefix:           uss_node
   node_binaries_path:               /tmp/node_bin
   node_binary_name:                 AVG.Ddtf.UssNode.exe
   config_template_path:             /templates/config.xml.erb
   log_level:                        <%= Logger::DEBUG %>
-  start_uss_node_queue_name:        builds.windows.ussnode
-  stop_uss_node_queue_name:         commands.windows.ussnode
-  uss_node_queue_prefetch:          5
   shutdown_node_wait_in_minutes:    60
   shutdown_node_check_count:        5
   shutdown_node_period_in_minutes:  10
+  shutdown_node_api_calls:          [10,5,0]
+  amqp: *amqp
   uss_node:
     enqueued_by:                  someone
     proton_url_suffix:            Proton/
@@ -49,23 +63,17 @@ default: &defaults
     admin_password_windows:       password
     rabbit_logs_username:         username
     rabbit_logs_password:         password
-    rabbit_logs_address:          localhost
+    rabbit_logs_host:             localhost
     rabbit_logs_port:             5672
-    rabbit_logs_virtual_host:     host
-    rabbit_finalci_username:      username
-    rabbit_finalci_password:      password
-    rabbit_finalci_address:       localhost
-    rabbit_finalci_port:          5672
-    rabbit_finalci_virtual_host:  host
-    rabbit_finalci_exchange:      reporting
-    rabbit_finalci_routing_key:   reporting.builds.builds
-    rabbit_finalci_error_type:    build:error
-  amqp:
-    host:                           localhost
-    port:                           15672
-    username:                       guest
-    password:                       guest
-    vhost:                          /
+    rabbit_logs_vhost:            host
+    rabbit_reporting_username:    username
+    rabbit_reporting_password:    password
+    rabbit_reporting_host:        localhost
+    rabbit_reporting_port:        5672
+    rabbit_reporting_vhost:       host
+    rabbit_reporting_build_reporting_exchange:      reporting
+    rabbit_reporting_build_reporting_routing_key:   reporting.builds.builds
+    rabbit_reporting_build_error_message_type:      build:error
 
 production:
   <<: *defaults

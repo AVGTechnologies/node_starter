@@ -2,7 +2,13 @@ require 'rexml/document'
 require 'xmlsimple'
 
 describe NodeStarter::NodeConfigStore do
-  let(:values) { {} }
+  let(:values) do
+    {
+      rabbit_logs: {},
+      rabbit_reporting: {}
+    }
+  end
+
   let(:subject) do
     NodeStarter::NodeConfigStore.new(values)
   end

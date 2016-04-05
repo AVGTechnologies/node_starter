@@ -13,6 +13,8 @@ describe NodeStarter::Killer do
 
     it 'calls node API' do
       expect(node_api).to receive(:stop) { Net::HTTPOK }
+      NodeStarter.config['shutdown_node_api_calls'] = [0]
+
       subject.shutdown_by_api
     end
 

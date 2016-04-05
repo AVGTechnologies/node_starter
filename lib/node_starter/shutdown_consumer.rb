@@ -23,7 +23,7 @@ module NodeStarter
         auto_delete: false
       }
 
-      @exchange = @channel.direct(NodeStarter.config.stop_uss_node_queue_name, exchange_params)
+      @exchange = @channel.direct(NodeStarter.config.amqp.stop_uss_node_queue_name, exchange_params)
 
       queue_params = {
         durable: false,
@@ -50,7 +50,7 @@ module NodeStarter
       fail QueueNotInitialized unless @queue
 
       NodeStarter.logger.debug(
-        "Waiting for messages in #{NodeStarter.config.stop_uss_node_queue_name}.")
+        "Waiting for messages in #{NodeStarter.config.amqp.stop_uss_node_queue_name}.")
 
       opts = {
         manual_ack: true,

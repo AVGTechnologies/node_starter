@@ -13,12 +13,20 @@ describe NodeStarter::QueueSubscribe do
     double('shutdown_consumer',
            setup: {},
            subscribe: {},
-           close_connection: {})
+           close_connection: {},
+           reject: {})
+  end
+  let(:reporting_publisher) do
+    double('reporting_publisher',
+           setup: {},
+           notify_receive: {},
+           notify_start: {})
   end
 
   before do
     allow(NodeStarter::Consumer).to receive(:new) { consumer }
     allow(NodeStarter::ShutdownConsumer).to receive(:new) { shutdown_consumer }
+    allow(NodeStarter::ReportingPublisher).to receive(:new) { reporting_publisher }
   end
 
   describe '#initialize' do
@@ -90,9 +98,9 @@ describe NodeStarter::QueueSubscribe do
         allow(starter).to receive(:start_node_process) { fail TestError }
       end
 
-      it 'does not acknowledge and rejects the message' do
-        expect(consumer).to receive(:ack).exactly(0).times
-        expect(consumer).to receive(:reject).exactly(1).times
+      it 'does acknowledge the message' do
+        expect(consumer).to receive(:ack).exactly(1).times
+        expect(consumer).to receive(:reject).exactly(0).times
         subject.send :run, {}, { config: {} }.to_json
       end
     end
@@ -132,8 +140,9 @@ describe NodeStarter::QueueSubscribe do
         sleep 0.1
       end
 
-      it 'sends nack on invalid input' do
-        expect(consumer).to receive(:reject).exactly(1).times
+      it 'sends ack on invalid input' do
+        expect(consumer).to receive(:reject).exactly(0).times
+        expect(consumer).to receive(:ack).exactly(1).times
         subject.send :run, {}, '{'
         sleep 0.1
       end
@@ -190,8 +199,9 @@ describe NodeStarter::QueueSubscribe do
         sleep 0.1
       end
 
-      it 'sends nack on invalid input' do
-        expect(shutdown_consumer).to receive(:reject).exactly(1).times
+      it 'sends ack on invalid input' do
+        expect(shutdown_consumer).to receive(:reject).exactly(0).times
+        expect(shutdown_consumer).to receive(:ack).exactly(1).times
 
         subject.send(:stop, expected_delivery_info, '{')
         sleep 0.1

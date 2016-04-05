@@ -23,14 +23,14 @@ describe 'NodeStarter::Subscribe integration' do
   let(:tmp_dir) { '/tmp/uss_node_temp_dir_123456' }
   let(:fake_consumer) { FakeConsumer.new }
   let(:fake_shutdown_consumer) do
-    double('fake shutdown consumer',
-           setup: {},
-           subscribe: {}
-          )
+    double('fake shutdown consumer', setup: {}, subscribe: {})
   end
 
   before(:each) do
     FileUtils.mkdir(tmp_dir)
+    allow(NodeStarter::ReportingPublisher).to receive(:new) do
+      double('reporting double', setup: {}, notify_receive: {}, notify_start: {})
+    end
   end
 
   after(:each) do

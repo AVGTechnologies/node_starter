@@ -24,7 +24,8 @@ describe NodeStarter::Consumer do
         port:     dummy_port,
         username: dummy_username,
         password: dummy_pass,
-        vhost:    dummy_vhost))
+        vhost:    dummy_vhost,
+        start_uss_node_queue_name: dummy_queue))
 
     allow(NodeStarter).to receive_message_chain(:config, :max_running_uss_nodes).and_return(1)
     allow(NodeStarter).to receive_message_chain(:config, :uss_node_queue_prefetch)
