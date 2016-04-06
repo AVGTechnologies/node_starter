@@ -5,11 +5,11 @@ module NodeStarter
   class ReportingPublisher
     def setup
       @conn = Bunny.new(
-        hostname: NodeStarter.config.rabbit_reporting.host,
-        port:     NodeStarter.config.rabbit_reporting.port,
-        username: NodeStarter.config.rabbit_reporting.username,
-        password: NodeStarter.config.rabbit_reporting.password,
-        vhost:    NodeStarter.config.rabbit_reporting.vhost)
+        hostname: NodeStarter.config.amqp.host,
+        port:     NodeStarter.config.amqp.port,
+        username: NodeStarter.config.amqp.username,
+        password: NodeStarter.config.amqp.password,
+        vhost:    NodeStarter.config.amqp.vhost)
 
       @conn.start
 
@@ -21,7 +21,7 @@ module NodeStarter
       }
 
       @exchange = @channel.topic(
-        NodeStarter.config.rabbit_reporting.build_reporting_exchange, exchange_params)
+        NodeStarter.config.amqp.build_reporting_exchange, exchange_params)
     end
 
     def notify_receive(id)
