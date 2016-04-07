@@ -10,14 +10,14 @@ describe NodeStarter::ReportingPublisher do
       username: 'neo',
       password: 'bar',
       vhost: 'baz',
-      build_reporting_exchange: 'qux'
+      build_reporting_exchange: 'qux',
+      build_receive_message_type: 'receive',
+      build_start_message_type: 'start'
     }
   end
 
   let(:config) do
-    double('config',
-           rabbit_reporting: double('rabbit', fake_config),
-           amqp: double('amqp', build_receive_message_type: {}, build_start_message_type: {}))
+    double('config', amqp: double('amqp', fake_config))
   end
 
   before do
@@ -31,11 +31,11 @@ describe NodeStarter::ReportingPublisher do
   describe '#setup' do
     it 'starts connection to rabbit' do
       bunny_configuration_expect = {
-        hostname: config.rabbit_reporting.host,
-        port:     config.rabbit_reporting.port,
-        username: config.rabbit_reporting.username,
-        password: config.rabbit_reporting.password,
-        vhost:    config.rabbit_reporting.vhost
+        hostname: config.amqp.host,
+        port:     config.amqp.port,
+        username: config.amqp.username,
+        password: config.amqp.password,
+        vhost:    config.amqp.vhost
       }
 
       expect(Bunny).to receive(:new).with(bunny_configuration_expect) { connection }

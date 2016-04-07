@@ -25,13 +25,8 @@ describe NodeStarter::Consumer do
         username: dummy_username,
         password: dummy_pass,
         vhost:    dummy_vhost,
-        start_uss_node_queue_name: dummy_queue))
-
-    allow(NodeStarter).to receive_message_chain(:config, :max_running_uss_nodes).and_return(1)
-    allow(NodeStarter).to receive_message_chain(:config, :uss_node_queue_prefetch)
-      .and_return(channel_prefetch)
-    allow(NodeStarter).to receive_message_chain(:config, :start_uss_node_queue_name)
-      .and_return(dummy_queue)
+        start_uss_node_queue_name: dummy_queue,
+        uss_node_queue_prefetch: channel_prefetch))
   end
 
   describe '#setup' do

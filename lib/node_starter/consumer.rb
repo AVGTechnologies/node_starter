@@ -17,7 +17,7 @@ module NodeStarter
       @conn.start
 
       @channel = @conn.create_channel
-      @channel.prefetch(NodeStarter.config.uss_node_queue_prefetch)
+      @channel.prefetch(NodeStarter.config.amqp.uss_node_queue_prefetch)
 
       queue_params = {
         durable: true,

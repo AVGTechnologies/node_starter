@@ -11,7 +11,6 @@ amqp: &amqp
   build_reporting_routing_key:    reporting.builds.builds
   build_receive_message_type:     build:receive
   build_start_message_type:       build:start
-  build_error_message_type:       build:error
 
 default: &defaults
   uss_node_folder_prefix:           uss_node
@@ -66,14 +65,14 @@ default: &defaults
     rabbit_logs_host:             localhost
     rabbit_logs_port:             5672
     rabbit_logs_vhost:            host
-    rabbit_reporting_username:    username
-    rabbit_reporting_password:    password
-    rabbit_reporting_host:        localhost
-    rabbit_reporting_port:        5672
-    rabbit_reporting_vhost:       host
-    rabbit_reporting_build_reporting_exchange:      reporting
-    rabbit_reporting_build_reporting_routing_key:   reporting.builds.builds
-    rabbit_reporting_build_error_message_type:      build:error
+    rabbit_final_ci_username:     username
+    rabbit_final_ci_password:     password
+    rabbit_final_ci_host:         localhost
+    rabbit_final_ci_port:         5672
+    rabbit_final_ci_vhost:        host
+    rabbit_final_ci_exchange:     reporting
+    rabbit_final_ci_routing_key:  reporting.builds.builds
+    rabbit_final_ci_message_type: build:error
 
 production:
   <<: *defaults
