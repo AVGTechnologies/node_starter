@@ -11,6 +11,7 @@ describe NodeStarter::ReportingPublisher do
       password: 'bar',
       vhost: 'baz',
       build_reporting_exchange: 'qux',
+      build_reporting_routing_key: 'mio',
       build_receive_message_type: 'receive',
       build_start_message_type: 'start'
     }
