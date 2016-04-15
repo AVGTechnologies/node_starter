@@ -117,7 +117,7 @@ module NodeStarter
     end
 
     def node_api_address(uuid)
-      'http://' + ip_address + ':8732/' + uuid + '/api/'
+      'http://' + ip_address + ':8732/' + uuid.delete('-') + '/api/'
     end
   end
 end
