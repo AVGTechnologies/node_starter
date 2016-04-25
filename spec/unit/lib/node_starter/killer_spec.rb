@@ -51,23 +51,27 @@ describe NodeStarter::Killer do
     it 'checks process for specified times' do
       responses = []
       NodeStarter.config.shutdown_node_check_count.times do
-        responses << false
+        responses << true
       end
 
-      expect(Sys::ProcTable).to receive(:ps).and_return(false, *responses, nil)
+      expect(ProcessExplorer::Explore).to receive(:process_exists?).and_return(
+        true,
+        *responses,
+        nil
+      )
 
       expect(Process).to receive(:kill).with('KILL', 1).exactly(0).times
       subject.watch_process
     end
 
     it 'doesn\'t force kill process if finishes' do
-      allow(Sys::ProcTable).to receive(:ps) { nil }
+      allow(ProcessExplorer::Explore).to receive(:process_exists?) { nil }
       expect(Process).to receive(:kill).with('KILL', 1).exactly(0).times
       subject.watch_process
     end
 
     it 'force kills process' do
-      allow(Sys::ProcTable).to receive(:ps) { true }
+      allow(ProcessExplorer::Explore).to receive(:process_exists?) { true }
       expect(Process).to receive(:kill).with('KILL', 1).exactly(1).times
       subject.watch_process
     end

@@ -20,7 +20,13 @@ end
 
 describe 'NodeStarter::Subscribe integration' do
   let(:subject) { NodeStarter::QueueSubscribe.new }
-  let(:tmp_dir) { '/tmp/uss_node_temp_dir_123456' }
+  let(:tmp_dir) do
+    if Gem.win_platform?
+      './rspec_tmp'
+    else
+      '/tmp/uss_node_temp_dir_123456'
+    end
+  end
   let(:fake_consumer) { FakeConsumer.new }
   let(:fake_shutdown_consumer) do
     double('fake shutdown consumer', setup: {}, subscribe: {})

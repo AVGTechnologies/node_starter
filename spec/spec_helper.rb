@@ -3,7 +3,6 @@ ENV['ENV'] = ENV['APP_ENV'] = 'test'
 $LOAD_PATH << 'lib'
 
 require 'rspec'
-
 require 'node_starter'
 require 'node_starter/queue_subscribe'
 require 'support/message_sender'
