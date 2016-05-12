@@ -15,7 +15,7 @@
     <VirtualHost><%= @rabbit_execution_logs_vhost %></VirtualHost>
     <Exchange><%= @rabbit_execution_logs_exchange %></Exchange>
     <RoutingKey><%= @rabbit_execution_logs_routing_key %></RoutingKey>
-    <ErrorMessageType><%= @rabbit_execution_logs_message_type %></ErrorMessageType>
+    <MessageType><%= @rabbit_execution_logs_message_type %></MessageType>
   </RabbitExecutionLogger>
   <FinalCIReporter>
     <Username><%= @rabbit_final_ci_username %></Username>
