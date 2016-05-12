@@ -11,7 +11,7 @@ gem 'sqlite3',          '~> 1.3.11'
 gem 'nokogiri',         '>= 1.6.7.rc'
 gem 'sidekiq',          '= 3.4.2'
 
-gem 'sys-proctable',    '= 0.9.9'
+gem 'process_explorer', github: 'AVGTechnologies/process_explorer'
 
 group :test, :development do
   gem 'rspec'
