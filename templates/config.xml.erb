@@ -7,6 +7,16 @@
     <Port><%= @rabbit_logs_port %></Port>
     <VirtualHost><%= @rabbit_logs_vhost %></VirtualHost>
   </RabbitMQLogsFeeder>
+  <RabbitExecutionLogger>
+    <Username><%= @rabbit_execution_logs_username %></Username>
+    <Password><%= @rabbit_execution_logs_password %></Password>
+    <IPAddress><%= @rabbit_execution_logs_host %></IPAddress>
+    <Port><%= @rabbit_execution_logs_port %></Port>
+    <VirtualHost><%= @rabbit_execution_logs_vhost %></VirtualHost>
+    <Exchange><%= @rabbit_execution_logs_exchange %></Exchange>
+    <RoutingKey><%= @rabbit_execution_logs_routing_key %></RoutingKey>
+    <ErrorMessageType><%= @rabbit_execution_logs_message_type %></ErrorMessageType>
+  </RabbitExecutionLogger>
   <FinalCIReporter>
     <Username><%= @rabbit_final_ci_username %></Username>
     <Password><%= @rabbit_final_ci_password %></Password>
