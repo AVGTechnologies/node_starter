@@ -3,3 +3,4 @@
 /config/ns_test.sqlite3
 /config/ns_production.sqlite3
 /tags
+/.pid
