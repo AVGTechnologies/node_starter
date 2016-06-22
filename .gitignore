@@ -4,3 +4,4 @@
 /config/ns_production.sqlite3
 /tags
 /.pid
+/log

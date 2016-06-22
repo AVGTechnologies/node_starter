@@ -18,6 +18,10 @@ default: &defaults
   node_binary_name:                 AVG.Ddtf.UssNode.exe
   config_template_path:             /templates/config.xml.erb
   log_level:                        <%= Logger::DEBUG %>
+  file_log_level:                   <%= Logger::ERROR %>
+  file_log_directory:               log
+  file_log_shift_age:               10
+  file_log_shift_size:              512000
   shutdown_node_wait_in_minutes:    60
   shutdown_node_check_count:        5
   shutdown_node_period_in_minutes:  10

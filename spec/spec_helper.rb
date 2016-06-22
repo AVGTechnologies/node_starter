@@ -10,6 +10,7 @@ require 'factory_girl'
 require 'factories'
 
 NodeStarter.setup
+NodeStarter.logger = Logger.new(nil)
 
 RSpec.configure do |config|
   config.filter_run focus: true
