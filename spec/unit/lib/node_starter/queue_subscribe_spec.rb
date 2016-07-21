@@ -19,8 +19,7 @@ describe NodeStarter::QueueSubscribe do
   let(:reporting_publisher) do
     double('reporting_publisher',
            setup: {},
-           notify_receive: {},
-           notify_start: {})
+           notify_receive: {})
   end
 
   before do
