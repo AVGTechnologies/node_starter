@@ -12,8 +12,7 @@ describe NodeStarter::ReportingPublisher do
       vhost: 'baz',
       build_reporting_exchange: 'qux',
       build_reporting_routing_key: 'mio',
-      build_receive_message_type: 'receive',
-      build_start_message_type: 'start'
+      build_receive_message_type: 'receive'
     }
   end
 
@@ -54,14 +53,6 @@ describe NodeStarter::ReportingPublisher do
       expect(topic).to receive(:publish)
       subject.setup
       subject.notify_receive('19')
-    end
-  end
-
-  describe '#notify_start' do
-    it 'publishes start message' do
-      expect(topic).to receive(:publish)
-      subject.setup
-      subject.notify_start('19')
     end
   end
 end

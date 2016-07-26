@@ -25,7 +25,8 @@
     <VirtualHost><%= @rabbit_final_ci_vhost %></VirtualHost>
     <Exchange><%= @rabbit_final_ci_exchange %></Exchange>
     <RoutingKey><%= @rabbit_final_ci_routing_key %></RoutingKey>
-    <ErrorMessageType><%= @rabbit_final_ci_message_type %></ErrorMessageType>
+    <ErrorMessageType><%= @rabbit_final_ci_error_message_type %></ErrorMessageType>    
+    <RunningMessageType><%= @rabbit_final_ci_running_message_type %></RunningMessageType>
   </FinalCIReporter>
   <Proton>
     <ProtonUrlSuffix><%= @proton_url_suffix %></ProtonUrlSuffix>

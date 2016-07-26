@@ -31,13 +31,5 @@ module NodeStarter
         routing_key: NodeStarter.config.amqp.build_reporting_routing_key
       )
     end
-
-    def notify_start(id)
-      @exchange.publish(
-        { id: id }.to_json,
-        type: NodeStarter.config.amqp.build_start_message_type || 'build:start',
-        routing_key: NodeStarter.config.amqp.build_reporting_routing_key
-      )
-    end
   end
 end

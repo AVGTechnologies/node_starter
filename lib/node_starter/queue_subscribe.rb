@@ -57,7 +57,6 @@ module NodeStarter
       @reporting_publisher.notify_receive(params['build_id'])
       starter.start_node_process
       @shutdown_consumer.register_node(params['build_id'])
-      @reporting_publisher.notify_start(params['build_id'])
       wait_for_node(starter, params['build_id'])
     rescue => e
       build_id = params ? params['build_id'] : 'unknown'
