@@ -10,7 +10,6 @@ amqp: &amqp
   build_reporting_exchange:       reporting
   build_reporting_routing_key:    reporting.builds.builds
   build_receive_message_type:     build:receive
-  build_start_message_type:       build:start
 
 default: &defaults
   uss_node_folder_prefix:           uss_node
