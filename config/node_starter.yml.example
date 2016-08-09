@@ -29,6 +29,8 @@ default: &defaults
   uss_node:
     enqueued_by:                          someone
     proton_url_suffix:                    Proton/
+    proton_attempt_count:                 3
+    proton_retry_base_in_seconds:         10
     base_address:                         http://localhost:1234/BaseAddress/
     uss_base_endpoint:                    http://localhost:4567/UssEndpoint/
     ddtf_web_link:                        https://ddtf-web-link
