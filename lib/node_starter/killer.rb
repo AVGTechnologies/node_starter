@@ -68,7 +68,7 @@ module NodeStarter
       result = nil
       NodeStarter.config.shutdown_node_api_calls.each do |sleep_time|
         result = NodeApi.new(uri).stop(@stopped_by)
-        break if result == Net::HTTPOK
+        break if result.is_a?(Net::HTTPOK)
         sleep sleep_time
       end
 
